@@ -67,7 +67,7 @@ function App() {
     padding: '35px',
     boxShadow: '2px 2px 10px rgba(0, 0, 0, 0.25)',
     borderRadius: '15px',
-    width: '80vw',
+    width: '70vw',
     maxWidth: '800px',
     transition: 'height 0.3s, background-color 0.3s',
     gap: '35px',
