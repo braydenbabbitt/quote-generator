@@ -49,15 +49,16 @@ export const SavedQuoteList: React.FC<SavedQuoteListProps> = (props: SavedQuoteL
     <>
       <div style={containerStyles} onClick={() => props.handleClose()}></div>
       <aside style={listStyles}>
-        <div style={{ position: 'sticky', top: '0', padding: '25px', backgroundColor: '#FFF', boxShadow: '0 2px 10px rgba(0,0,0,0.15)', textAlign: 'right' }}>
+        <div style={{ position: 'sticky', top: '0', padding: '25px', backgroundColor: '#FFF', boxShadow: '0 2px 10px rgba(0,0,0,0.15)', display: 'flex', justifyContent: 'space-between' }}>
+          <h2 style={{ margin: 0 }}>Saved Quotes</h2>
           <FontAwesomeIcon icon={faXmark} onClick={() => props.handleClose()} style={{ color: '#232323', fontSize: '28px', cursor: 'pointer' }} />
         </div>
         <div style={{ padding: '0 25px 25px 25px', overflowY: 'auto' }}>
           {props.quotes.map(item => {
             return <div key={item.id} style={{ display: 'flex', alignItems: 'center', gap: '25px', padding: '15px 0', borderBottom: '1px solid #D2D2D2' }}>
               <div>
-                <h2 style={{ fontSize: '1.25em', margin: 0 }}>"{item.text}"</h2>
-                <h3 style={{ fontSize: '0.9em', margin: 0 }}>- {item.author}</h3>
+                <h3 style={{ fontSize: '1.25em', margin: 0 }}>"{item.text}"</h3>
+                <h4 style={{ fontSize: '0.9em', margin: 0 }}>- {item.author}</h4>
               </div>
               <FontAwesomeIcon icon={faXmark} onClick={() => props.handleDelete(item.id)} style={{ color: 'red', fontSize: '28px', marginLeft: 'auto', cursor: 'pointer' }} />
             </div>
