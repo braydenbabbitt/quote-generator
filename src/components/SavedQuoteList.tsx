@@ -52,7 +52,7 @@ export const SavedQuoteList: React.FC<SavedQuoteListProps> = (props: SavedQuoteL
         <div style={{ position: 'sticky', top: '0', padding: '25px', backgroundColor: '#FFF', boxShadow: '0 2px 10px rgba(0,0,0,0.15)', textAlign: 'right' }}>
           <FontAwesomeIcon icon={faXmark} onClick={() => props.handleClose()} style={{ color: '#232323', fontSize: '28px', cursor: 'pointer' }} />
         </div>
-        <div style={{ padding: '0 25px 25px 25px', overflowY: 'scroll' }}>
+        <div style={{ padding: '0 25px 25px 25px', overflowY: 'auto' }}>
           {props.quotes.map(item => {
             return <div key={item.id} style={{ display: 'flex', alignItems: 'center', gap: '25px', padding: '15px 0', borderBottom: '1px solid #D2D2D2' }}>
               <div>
