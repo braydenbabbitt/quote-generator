@@ -5,6 +5,8 @@ import type * as CSS from 'csstype';
 import WebFont from 'webfontloader';
 import colorContrast from 'color-contrast';
 import { SavedQuoteList } from './components/SavedQuoteList';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 const FONTS = {
   primaryFont: 'Open Sans'
@@ -107,8 +109,8 @@ function App() {
     borderRadius: '5px',
     fontSize: '0.9em',
     color: state.quoteButtonHover ?
-      state.quote.text === '' ? '#232323' : '#FFF' :
-      state.quote.text === '' ? '#FFF' : '#232323',
+      state.quote.text === '' ? state.color : '#FFF' :
+      state.quote.text === '' ? '#FFF' : state.color,
     transition: 'background-color 0.15s, color 0.15s'
   }
   const tweetButtonStyles: CSS.Properties = {
@@ -122,8 +124,8 @@ function App() {
     textDecoration: 'none',
     fontSize: '0.9em',
     color: state.tweetButtonHover ?
-      state.quote.text === '' ? '#232323' : '#FFF' :
-      state.quote.text === '' ? '#FFF' : '#232323',
+      state.quote.text === '' ? state.color : '#FFF' :
+      state.quote.text === '' ? '#FFF' : state.color,
     transition: 'background-color 0.15s, color 0.15s'
   }
   const saveButtonStyles: CSS.Properties = {
@@ -137,8 +139,8 @@ function App() {
     textDecoration: 'none',
     fontSize: '0.9em',
     color: state.saveButtonHover ?
-      state.quote.text === '' ? '#232323' : '#FFF' :
-      state.quote.text === '' ? '#FFF' : '#232323',
+      state.quote.text === '' ? state.color : '#FFF' :
+      state.quote.text === '' ? '#FFF' : state.color,
     transition: 'background-color 0.15s, color 0.15s'
   }
 
@@ -169,11 +171,14 @@ function App() {
       savedListIsOpen: true
     }))
   }
+  const deleteQuote = (id: string) => {
+    setSavedQuotes(previous => [...previous.filter(item => item.id !== id)]);
+  }
 
   return (
     <>
       <section id='app' style={appStyles}>
-        <button onClick={() => openSavedQuoteList()}>Open Side</button>
+        <FontAwesomeIcon icon={faBars} onClick={() => openSavedQuoteList()} style={{ color: '#FFF', fontSize: '24px', position: 'absolute', right: '25px', top: '25px', cursor: 'pointer' }} />
         <div id='card' style={cardStyles}>
           {state.quote.text === '' ? null : <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '5px' }}>
             <h2 style={{ color: state.color, fontWeight: 'bold', transition: 'color 0.3s', margin: '0' }}>"{state.quote.text}"</h2>
@@ -214,7 +219,7 @@ function App() {
           Created by Brayden Babbitt
         </a>
       </section >
-      <SavedQuoteList quotes={savedQuotes} isOpen={state.savedListIsOpen} handleClose={closeSavedQuoteList} />
+      <SavedQuoteList quotes={savedQuotes} isOpen={state.savedListIsOpen} handleClose={closeSavedQuoteList} handleDelete={deleteQuote} />
     </>
   )
 }
