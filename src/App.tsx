@@ -7,6 +7,7 @@ import colorContrast from 'color-contrast';
 import { SavedQuoteList } from './components/SavedQuoteList';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { TextButton } from './components/Buttons';
 
 const FONTS = {
   primaryFont: 'Open Sans'
@@ -47,9 +48,6 @@ function App() {
     },
     color: '#232323',
     creatorButtonHover: false,
-    quoteButtonHover: false,
-    tweetButtonHover: false,
-    saveButtonHover: false,
     savedListIsOpen: false,
   });
 
@@ -99,50 +97,6 @@ function App() {
     fontSize: '0.85em',
     boxShadow: state.creatorButtonHover ? '2px 2px 4px rgba(0, 0, 0, 0.15)' : 'none'
   }
-  const quoteButtonStyles: CSS.Properties = {
-    backgroundColor: state.quoteButtonHover ?
-      state.quote.text === '' ? '#FFF' : state.color :
-      'transparent',
-    cursor: 'pointer',
-    border: `1px solid ${state.quote.text === '' ? '#FFF' : state.color}`,
-    padding: '8px 12px',
-    borderRadius: '5px',
-    fontSize: '0.9em',
-    color: state.quoteButtonHover ?
-      state.quote.text === '' ? state.color : '#FFF' :
-      state.quote.text === '' ? '#FFF' : state.color,
-    transition: 'background-color 0.15s, color 0.15s'
-  }
-  const tweetButtonStyles: CSS.Properties = {
-    backgroundColor: state.tweetButtonHover ?
-      state.quote.text === '' ? '#FFF' : state.color :
-      'transparent',
-    cursor: 'pointer',
-    border: `1px solid ${state.quote.text === '' ? '#FFF' : state.color}`,
-    padding: '8px 12px',
-    borderRadius: '5px',
-    textDecoration: 'none',
-    fontSize: '0.9em',
-    color: state.tweetButtonHover ?
-      state.quote.text === '' ? state.color : '#FFF' :
-      state.quote.text === '' ? '#FFF' : state.color,
-    transition: 'background-color 0.15s, color 0.15s'
-  }
-  const saveButtonStyles: CSS.Properties = {
-    backgroundColor: state.saveButtonHover ?
-      state.quote.text === '' ? '#FFF' : state.color :
-      'transparent',
-    cursor: 'pointer',
-    border: `1px solid ${state.quote.text === '' ? '#FFF' : state.color}`,
-    padding: '8px 12px',
-    borderRadius: '5px',
-    textDecoration: 'none',
-    fontSize: '0.9em',
-    color: state.saveButtonHover ?
-      state.quote.text === '' ? state.color : '#FFF' :
-      state.quote.text === '' ? '#FFF' : state.color,
-    transition: 'background-color 0.15s, color 0.15s'
-  }
 
   // Handle generating a new quote action
   const generateNewQuote = (setState: (arg0: (prevState: any) => any) => void) => {
@@ -171,6 +125,14 @@ function App() {
       savedListIsOpen: true
     }))
   }
+  const saveCurrentQuote = () => {
+    setSavedQuotes(previous => {
+      if (!previous.includes(state.quote)) {
+        return [...previous, state.quote];
+      }
+      return previous;
+    })
+  }
   const deleteQuote = (id: string) => {
     setSavedQuotes(previous => [...previous.filter(item => item.id !== id)]);
   }
@@ -185,39 +147,14 @@ function App() {
             <h3 style={{ color: state.color, fontWeight: 'lighter', transition: 'color 0.3s', margin: '0' }}>{state.quote.author}</h3>
           </div>}
           <div style={{ display: 'flex', gap: '15px' }}>
-            {state.quote.text === '' ? null : <a onMouseEnter={() => setState(prevState => ({ ...prevState, tweetButtonHover: true }))}
-              onMouseLeave={() => setState(prevState => ({ ...prevState, tweetButtonHover: false }))}
-              style={tweetButtonStyles}
-              target="_blank"
-              href={`https://twitter.com/intent/tweet?related=braydentbabbitt&text=${encodeURIComponent(`"${state.quote.text}" - ${state.quote.author}`)}`}
-            >
-              Tweet
+            {state.quote.text === '' ? null : <a href={`https://twitter.com/intent/tweet?related=braydentbabbitt&text=${encodeURIComponent(`"${state.quote.text}" - ${state.quote.author}`)}`}>
+              <TextButton fontSize='0.9em' primaryColor={state.quote.text === '' ? '#FFF' : state.color}>Tweet</TextButton>
             </a>}
-            <button style={quoteButtonStyles}
-              onMouseEnter={() => setState(prevState => ({ ...prevState, quoteButtonHover: true }))}
-              onMouseLeave={() => setState(prevState => ({ ...prevState, quoteButtonHover: false }))}
-              onClick={() => generateNewQuote(setState)}
-            >
-              {state.quote.text === '' ? 'Get Quote' : 'Get New Quote'}
-            </button>
-            {state.quote.text === '' ? null : <button style={saveButtonStyles}
-              onClick={() => {
-                setSavedQuotes(previous => {
-                  if (!previous.includes(state.quote)) {
-                    return [...previous, state.quote];
-                  }
-                  return previous;
-                })
-              }}
-              onMouseEnter={() => setState(prevState => ({ ...prevState, saveButtonHover: true }))}
-              onMouseLeave={() => setState(prevState => ({ ...prevState, saveButtonHover: false }))}>
-              Save Quote
-            </button>}
+            <TextButton fontSize='0.9em' onClick={() => generateNewQuote(setState)} primaryColor={state.quote.text === '' ? '#FFF' : state.color}>{state.quote.text === '' ? 'Get Quote' : 'Get New Quote'}</TextButton>
+            {state.quote.text === '' ? null : <TextButton fontSize='0.9em' onClick={saveCurrentQuote} primaryColor={state.quote.text === '' ? '#FFF' : state.color}>Save Quote</TextButton>}
           </div>
         </div>
-        <a href='https://braydenbabbitt.com' id='creator-button' style={creatorButtonStyles} target='_blank' onMouseEnter={() => setState(prevState => ({ ...prevState, creatorButtonHover: true }))} onMouseLeave={() => setState(prevState => ({ ...prevState, creatorButtonHover: false }))}>
-          Created by Brayden Babbitt
-        </a>
+        <a href="https://braydenbabbitt.com" id='creator-button' target='_blank'><TextButton fontSize='0.85em' fontWeight='bold' hasBorder={false}>Created by Brayden Babbitt</TextButton></a>
       </section >
       <SavedQuoteList quotes={savedQuotes} isOpen={state.savedListIsOpen} handleClose={closeSavedQuoteList} handleDelete={deleteQuote} />
     </>
