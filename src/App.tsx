@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { TextButton } from './components/Buttons';
 import IconButton from '@mui/material/IconButton';
-import { Favorite, FavoriteBorderOutlined } from '@mui/icons-material';
+import { Favorite, FavoriteBorderOutlined, Key } from '@mui/icons-material';
 
 const FONTS = {
   primaryFont: 'Open Sans'
@@ -150,6 +150,11 @@ function App() {
     setSavedQuotes(previous => [...previous.filter(item => item.id !== id)]);
   }
 
+  useEffect(() => {
+    window.addEventListener("keydown", (e) => { if (e.key === 'Enter') generateNewQuote(setState); });
+    return () => { window.removeEventListener("keydown", (e) => { if (e.key === 'Enter') generateNewQuote(setState) }); }
+  }, []);
+
   return (
     <>
       <section id='app' style={appStyles}>
@@ -164,7 +169,6 @@ function App() {
               <TextButton fontSize='0.9em' primaryColor={state.quote.text === '' ? '#FFF' : state.color}>Tweet</TextButton>
             </a>}
             <TextButton fontSize='0.9em' onClick={() => generateNewQuote(setState)} primaryColor={state.quote.text === '' ? '#FFF' : state.color}>{state.quote.text === '' ? 'Get Quote' : 'Get New Quote'}</TextButton>
-            {/* {state.quote.text === '' ? null : <TextButton fontSize='0.9em' onClick={saveCurrentQuote} primaryColor={state.quote.text === '' ? '#FFF' : state.color}>Save Quote</TextButton>} */}
             {state.quote.text === '' ? null : <IconButton onClick={toggleCurrentQuoteSave} >{savedQuotes.includes(state.quote) ? <Favorite sx={{ fontSize: '1.15em' }} htmlColor="#e40ce8" /> : <FavoriteBorderOutlined sx={{ fontSize: '1.15em' }} htmlColor={state.color} />}</IconButton>}
           </div>
         </div>
