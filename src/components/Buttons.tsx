@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import type * as CSS from 'csstype';
 import { getHighestContrast } from '../utils/colorComparison';
 
-type TextButtonProps = {
+interface TextButtonProps {
   onClick?: () => any,
   fontSize?: CSS.StandardLonghandProperties['fontSize'],
   fontWeight?: CSS.StandardLonghandProperties['fontWeight'],
@@ -17,7 +17,6 @@ const defaultProps = {
   hasBorder: true,
   primaryColor: '#FFF',
 }
-
 export const TextButton: React.FC<TextButtonProps> = (props: TextButtonProps) => {
   const [state, setState] = useState({
     hover: false

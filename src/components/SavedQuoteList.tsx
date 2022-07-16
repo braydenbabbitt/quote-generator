@@ -14,6 +14,7 @@ interface SavedQuoteListProps {
   isOpen: boolean,
   handleClose: () => void,
   handleDelete: (arg0: string) => void,
+  handleOpenQuote: (quote: Quote) => void
 }
 
 export const SavedQuoteList: React.FC<SavedQuoteListProps> = (props: SavedQuoteListProps) => {
@@ -56,7 +57,7 @@ export const SavedQuoteList: React.FC<SavedQuoteListProps> = (props: SavedQuoteL
         <div style={{ padding: '0 25px 25px 25px', overflowY: 'auto' }}>
           {props.quotes.map(item => {
             return <div key={item.id} style={{ display: 'flex', alignItems: 'center', gap: '25px', padding: '15px 0', borderBottom: '1px solid #D2D2D2' }}>
-              <div>
+              <div onClick={() => props.handleOpenQuote(item)} style={{ cursor: 'pointer' }}>
                 <h3 style={{ fontSize: '1.25em', margin: 0 }}>"{item.text}"</h3>
                 <h4 style={{ fontSize: '0.9em', margin: 0 }}>- {item.author}</h4>
               </div>

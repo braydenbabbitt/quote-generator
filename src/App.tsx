@@ -8,6 +8,8 @@ import { SavedQuoteList } from './components/SavedQuoteList';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { TextButton } from './components/Buttons';
+import IconButton from '@mui/material/IconButton';
+import { Favorite, FavoriteBorderOutlined } from '@mui/icons-material';
 
 const FONTS = {
   primaryFont: 'Open Sans'
@@ -125,13 +127,24 @@ function App() {
       savedListIsOpen: true
     }))
   }
-  const saveCurrentQuote = () => {
+  const toggleCurrentQuoteSave = () => {
     setSavedQuotes(previous => {
       if (!previous.includes(state.quote)) {
         return [...previous, state.quote];
+      } else {
+        return [...previous.filter(item => item.id !== state.quote.id)];
       }
-      return previous;
     })
+  }
+  const openQuote = (quote: Quote) => {
+    if (state.quote.id !== quote.id) {
+      setState(previous => ({
+        ...previous,
+        quote: quote,
+        color: getNewColor(7),
+        savedListIsOpen: false,
+      }));
+    }
   }
   const deleteQuote = (id: string) => {
     setSavedQuotes(previous => [...previous.filter(item => item.id !== id)]);
@@ -146,17 +159,18 @@ function App() {
             <h2 style={{ color: state.color, fontWeight: 'bold', transition: 'color 0.3s', margin: '0' }}>"{state.quote.text}"</h2>
             <h3 style={{ color: state.color, fontWeight: 'lighter', transition: 'color 0.3s', margin: '0' }}>{state.quote.author}</h3>
           </div>}
-          <div style={{ display: 'flex', gap: '15px' }}>
+          <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
             {state.quote.text === '' ? null : <a href={`https://twitter.com/intent/tweet?related=braydentbabbitt&text=${encodeURIComponent(`"${state.quote.text}" - ${state.quote.author}`)}`}>
               <TextButton fontSize='0.9em' primaryColor={state.quote.text === '' ? '#FFF' : state.color}>Tweet</TextButton>
             </a>}
             <TextButton fontSize='0.9em' onClick={() => generateNewQuote(setState)} primaryColor={state.quote.text === '' ? '#FFF' : state.color}>{state.quote.text === '' ? 'Get Quote' : 'Get New Quote'}</TextButton>
-            {state.quote.text === '' ? null : <TextButton fontSize='0.9em' onClick={saveCurrentQuote} primaryColor={state.quote.text === '' ? '#FFF' : state.color}>Save Quote</TextButton>}
+            {/* {state.quote.text === '' ? null : <TextButton fontSize='0.9em' onClick={saveCurrentQuote} primaryColor={state.quote.text === '' ? '#FFF' : state.color}>Save Quote</TextButton>} */}
+            {state.quote.text === '' ? null : <IconButton onClick={toggleCurrentQuoteSave} >{savedQuotes.includes(state.quote) ? <Favorite sx={{ fontSize: '1.15em' }} htmlColor="#e40ce8" /> : <FavoriteBorderOutlined sx={{ fontSize: '1.15em' }} htmlColor={state.color} />}</IconButton>}
           </div>
         </div>
         <a href="https://braydenbabbitt.com" id='creator-button' target='_blank'><TextButton fontSize='0.85em' fontWeight='bold' hasBorder={false}>Created by Brayden Babbitt</TextButton></a>
       </section >
-      <SavedQuoteList quotes={savedQuotes} isOpen={state.savedListIsOpen} handleClose={closeSavedQuoteList} handleDelete={deleteQuote} />
+      <SavedQuoteList quotes={savedQuotes} isOpen={state.savedListIsOpen} handleClose={closeSavedQuoteList} handleDelete={deleteQuote} handleOpenQuote={openQuote} />
     </>
   )
 }
